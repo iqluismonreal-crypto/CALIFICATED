@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1f6feb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>CALIFICATED CELULAR V1</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--ink:#17202b;--mut:#5d6b7a;--line:#d9e0e8;--acc:#1f6feb;--accink:#fff;--ok:#1a7f37;--okbg:#dcf3e2;--bad:#cf222e;--badbg:#fde3e5;--warn:#9a6700;--warnbg:#fff1cc;--inf:#0969da;--infbg:#ddeeff;--sh:0 1px 3px rgba(20,30,45,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f141a;--card:#18202a;--ink:#e8edf3;--mut:#9aa8b8;--line:#2b3644;--acc:#4c8dff;--accink:#fff;--ok:#56d364;--okbg:#14301c;--bad:#ff7b72;--badbg:#3a1a1d;--warn:#e3b341;--warnbg:#3a2f10;--inf:#79c0ff;--infbg:#13283f;--sh:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{padding-bottom:calc(66px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:var(--acc);color:var(--accink);padding:calc(8px + env(safe-area-inset-top)) 16px 8px}
+header b{font-size:17px;letter-spacing:.2px}header small{opacity:.85;margin-left:4px}
+#sub{font-size:12px;opacity:.92;min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{padding:12px 16px;max-width:640px;margin:0 auto}
+.hide{display:none!important}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:var(--sh)}
+h3{margin:14px 0 8px;font-size:16px}h4{margin:0 0 6px;font-size:15px}
+.mut{color:var(--mut);font-size:13px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row>label{flex:1;min-width:110px;font-size:12px;color:var(--mut);display:flex;flex-direction:column;gap:2px}
+select,input[type=date],input[type=text]{font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:100%;min-height:44px}
+button,.btn{font:inherit;font-weight:600;min-height:46px;padding:10px 14px;border:0;border-radius:12px;background:var(--acc);color:var(--accink);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center}
+button.sec,.btn.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+button.danger{background:var(--bad);color:#fff}
+button:disabled{opacity:.45}
+button.big{width:100%;min-height:56px;font-size:17px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;color:var(--mut);border-radius:0;min-height:60px;flex-direction:column;gap:0;font-size:12px;font-weight:600}
+nav button span{font-size:22px;line-height:1.1}nav button.on{color:var(--acc)}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;min-height:40px;background:none;color:var(--mut);border-radius:9px}.seg button.on{background:var(--acc);color:var(--accink)}
+.bar{height:8px;border-radius:6px;background:var(--line);overflow:hidden;margin:8px 0 4px}.bar i{display:block;height:100%;background:var(--ok)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;background:var(--line);color:var(--ink)}
+.chip.A{background:var(--okbg);color:var(--ok)}.chip.R{background:var(--warnbg);color:var(--warn)}.chip.F{background:var(--badbg);color:var(--bad)}.chip.J{background:var(--infbg);color:var(--inf)}
+.al{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}.al:last-child{border:0}
+.al .n{width:26px;color:var(--mut);font-size:13px;text-align:right}.al .nm{flex:1;font-weight:600;font-size:15px;line-height:1.2;word-break:break-word}
+.al .bt{display:flex;gap:6px}
+.al .bt button{width:42px;min-height:42px;padding:0;border-radius:50%;background:var(--card);color:var(--mut);border:2px solid var(--line);font-size:17px}
+.al .bt button.on.A{background:var(--ok);border-color:var(--ok);color:#fff}.al .bt button.on.R{background:var(--warn);border-color:var(--warn);color:#fff}
+.al .bt button.on.F{background:var(--bad);border-color:var(--bad);color:#fff}.al .bt button.on.J{background:var(--inf);border-color:var(--inf);color:#fff}
+.uno{text-align:center;padding:18px 12px}.uno .cnt{color:var(--mut);font-size:14px}.uno .nombre{font-size:26px;font-weight:800;line-height:1.15;margin:14px 0 16px;word-break:break-word;min-height:62px;display:flex;align-items:center;justify-content:center}
+.uno .grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px}.uno .grid4 button{min-height:70px;font-size:18px;flex-direction:column}
+.uno .grid4 button small{font-size:12px;font-weight:500;opacity:.9}
+.b-A{background:var(--ok)!important;color:#fff!important}.b-R{background:var(--warn)!important;color:#fff!important}.b-F{background:var(--bad)!important;color:#fff!important}.b-J{background:var(--inf)!important;color:#fff!important}
+.uno .nav2{display:flex;gap:8px;margin-top:12px}.uno .nav2 button{flex:1}
+.vacio{text-align:center;padding:26px 14px}.vacio p{color:var(--mut)}
+.camwrap{margin-bottom:12px}
+.vidbox{position:relative;background:#000;border-radius:14px;overflow:hidden;width:100%;aspect-ratio:3/4;max-height:70vh}
+.vidbox video,.vidbox canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+#cam-hint{position:absolute;left:8px;right:8px;top:8px;padding:6px 10px;border-radius:10px;background:rgba(0,0,0,.62);color:#fff;font-size:14px;text-align:center}
+#cam-hint.ok{background:rgba(26,127,55,.92)}
+.lr{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer}.lr:last-child{border:0}
+.lr .nm{flex:1;font-weight:600;font-size:15px;line-height:1.2;word-break:break-word}.lr .n{width:26px;color:var(--mut);font-size:13px;text-align:right}
+.lr .sc{font-weight:800;font-size:17px;min-width:44px;text-align:right}
+.tag{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--line);color:var(--mut);font-weight:700}
+.tag.w{background:var(--warnbg);color:var(--warn)}.tag.g{background:var(--okbg);color:var(--ok)}
+#sheet{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center}
+#sheet .panel{background:var(--card);width:100%;max-width:640px;max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom))}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 10px}
+.score{display:flex;align-items:baseline;gap:10px;margin:8px 0}.score b{font-size:38px;line-height:1}.score span{color:var(--mut)}
+.grid20{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0}
+.cell{border:2px solid var(--line);border-radius:10px;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:20px;cursor:pointer;background:var(--card);user-select:none}
+.cell small{font-size:11px;font-weight:600;color:var(--mut);line-height:1}
+.cell.good{background:var(--okbg);border-color:var(--ok)}.cell.wrong{background:var(--badbg);border-color:var(--bad)}.cell.dud{border-color:var(--warn);border-style:dashed;background:var(--warnbg)}
+.chips.t button{min-width:60px}.chips.t button.on{background:var(--acc);color:var(--accink)}
+.msg{padding:8px 10px;border-radius:10px;font-size:14px;margin:8px 0}.msg.w{background:var(--warnbg);color:var(--warn)}.msg.i{background:var(--infbg);color:var(--inf)}.msg.b{background:var(--badbg);color:var(--bad)}.msg.g{background:var(--okbg);color:var(--ok)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));background:#17202b;color:#fff;padding:10px 16px;border-radius:12px;z-index:30;font-size:14px;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+ol.pasos{padding-left:20px;margin:6px 0}ol.pasos li{margin:4px 0}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:3px 0}.kv span:first-child{color:var(--mut)}
+</style>
+</head>
+<body>
+<header><div><b>CALIFICATED CELULAR</b><small>V1</small></div><div id="sub"></div></header>
+<main>
+<!-- ============ NOMBRAR LISTA ============ -->
+<section id="v-lista">
+  <div id="lista-vacio" class="card vacio hide"></div>
+  <div id="lista-app">
+    <div class="card"><div class="row">
+      <label>Grupo<select id="l-g"></select></label>
+      <label>Parcial<select id="l-p"><option value="1">Parcial 1</option><option value="2">Parcial 2</option><option value="3">Parcial 3</option></select></label>
+      <label>Fecha<input type="date" id="l-f"></label>
+    </div></div>
+    <div class="card" id="l-res"></div>
+    <div class="seg"><button data-modo="uno">Una por una</button><button data-modo="lista">Toda la lista</button></div>
+    <div id="l-cuerpo"></div>
+  </div>
+</section>
+<!-- ============ HOJAS DE RESPUESTAS ============ -->
+<section id="v-hojas" class="hide">
+  <div id="hojas-vacio" class="card vacio hide"></div>
+  <div id="hojas-app">
+    <div class="card"><div class="row">
+      <label>Grupo<select id="h-g"></select></label>
+      <label>Parcial<select id="h-p"><option value="1">Parcial 1</option><option value="2">Parcial 2</option><option value="3">Parcial 3</option></select></label>
+    </div><div class="mut" style="margin-top:6px">Si la hoja trae su código, el sistema sabe solo de quién es; esto sirve para hojas sin nombre y para captura a mano.</div></div>
+    <div class="camwrap">
+      <div id="cam-idle" class="card">
+        <button class="big" id="btn-cam">📷 Abrir cámara y leer hojas</button>
+        <div class="row" style="margin-top:8px">
+          <label class="btn sec" style="flex:1;min-width:140px;color:var(--ink);font-size:15px">📸 Tomar foto<input type="file" accept="image/*" capture="environment" id="f-foto" hidden></label>
+          <label class="btn sec" style="flex:1;min-width:140px;color:var(--ink);font-size:15px">🖼 Elegir imagen<input type="file" accept="image/*" id="f-img" hidden></label>
+        </div>
+        <div id="cam-err" class="msg w hide" style="margin-top:8px"></div>
+      </div>
+      <div id="cam-live" class="hide">
+        <div class="vidbox"><video id="vid" playsinline muted autoplay></video><canvas id="ov"></canvas><div id="cam-hint">Encuadra la hoja completa</div></div>
+        <div class="row" style="margin-top:8px">
+          <button id="btn-torch" class="sec hide" style="flex:0 0 52px">🔦</button>
+          <button id="btn-stop" class="sec" style="flex:1">Cerrar cámara</button>
+        </div>
+        <label class="mut" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="chk-auto" style="width:20px;height:20px"> Guardar solo, sin confirmar, cuando no haya dudas</label>
+      </div>
+    </div>
+    <div class="row" style="margin-bottom:6px"><h3 style="margin:0;flex:1">Alumnos del grupo</h3><button class="sec" id="btn-manual" style="min-height:40px">✍ Captura a mano</button></div>
+    <div id="l-lect" class="card"></div>
+  </div>
+</section>
+<!-- ============ DATOS ============ -->
+<section id="v-datos" class="hide">
+  <div class="card" id="d-pc"></div>
+  <div class="card" id="d-env"></div>
+  <div class="card">
+    <h4>Cómo se mueven los datos</h4>
+    <ol class="pasos">
+      <li><b>En la PC:</b> pestaña <i>Exportar / Respaldo</i> → <i>Respaldo (.json)</i>.</li>
+      <li>Mándalo por WhatsApp a tu propio número (o a "Tú") y ábrelo en el celular.</li>
+      <li><b>Aquí:</b> “Elegir respaldo” y listo: ya están tus grupos, alumnos, claves y hojas.</li>
+      <li>Pasa lista y lee hojas en el salón. Luego “Compartir” cada archivo a tu WhatsApp.</li>
+      <li><b>En la PC:</b> asistencias en <i>Exportar / Respaldo → Importar CSV</i>; hojas en <i>Examen interno → Cargar lecturas de hojas</i>.</li>
+    </ol>
+    <div class="mut">Importar el mismo archivo dos veces no duplica nada. Del respaldo el celular solo guarda lo necesario (alumnos, claves, hojas impresas y la asistencia del día); no guarda teléfonos ni reportes.</div>
+  </div>
+  <div class="card"><div class="row"><button class="sec danger" id="btn-borrar" style="flex:1">Borrar todos los datos del celular</button></div></div>
+</section>
+</main>
+<nav>
+  <button data-tab="lista" class="on"><span>📋</span>Nombrar lista</button>
+  <button data-tab="hojas"><span>📄</span>Hojas</button>
+  <button data-tab="datos"><span>🔄</span>Datos</button>
+</nav>
+<!-- revisión de una hoja -->
+<div id="sheet" class="hide"><div class="panel">
+  <div class="grab"></div>
+  <div id="rv-quien"></div>
+  <div id="rv-score"></div>
+  <div class="mut" style="margin-top:6px">Tipo de examen</div>
+  <div class="chips t" id="rv-tipo" style="margin-top:4px"></div>
+  <div class="mut" style="margin-top:10px">Respuestas (toca una casilla para corregirla: A → B → C → D → en blanco)</div>
+  <div class="grid20" id="rv-grid"></div>
+  <div id="rv-msg"></div>
+  <div class="row"><button id="rv-save" style="flex:2">Guardar</button><button id="rv-cancel" class="sec" style="flex:1">Descartar</button></div>
+</div></div>
+<div id="toast"></div>
+<input type="file" id="f-resp" accept=".json,application/json,text/plain,*/*" hidden>
+
+<script>
+/* ===== LECTOR DE HOJAS DE BOLITAS (misma geometría que CALIFICATED PC) ===== */
+const Lector=(function(){
+const HX={W:215.9,H:279.4,MK:13,MS:11,NQ:20,colX:[52,142],dx:12,y0:112,dy:13,
+  idN:16,idS:7,idG:2,idY:66,tpX:[164.5,175,185.5],tpY:41.5,OP:['A','B','C','D']};
+HX.idX0=(HX.W-(HX.idN*HX.idS+(HX.idN-1)*HX.idG))/2;
+const bubXY=(q,o)=>({x:HX.colX[q<10?0:1]+o*HX.dx,y:HX.y0+(q%10)*HX.dy});
+const idXY=k=>({x:HX.idX0+k*(HX.idS+HX.idG)+HX.idS/2,y:HX.idY});
+const tpXY=k=>({x:HX.tpX[k],y:HX.tpY});
+function codeBits(c){const b=[];for(let i=13;i>=0;i--)b.push((c>>i)&1);const a=b.slice(0,7).reduce((x,y)=>x^y,0),d=b.slice(7).reduce((x,y)=>x^y,0);b.push(1^a,1^d);return b}
+function codeOk(b){if(b.length!==16)return -1;let c=0;for(let i=0;i<14;i++)c=(c<<1)|b[i];const e=codeBits(c);return(c>0&&e[14]===b[14]&&e[15]===b[15])?c:-1}
+
+function toGray(rgba,n){const g=new Uint8Array(n);for(let i=0,j=0;i<n;i++,j+=4)g[i]=(rgba[j]*77+rgba[j+1]*150+rgba[j+2]*29)>>8;return g}
+function boxMean(g,w,h,r){
+  const W1=w+1,I=new Int32Array(W1*(h+1));
+  for(let y=0;y<h;y++){let row=0;const o=y*w,a=(y+1)*W1,b=y*W1;for(let x=0;x<w;x++){row+=g[o+x];I[a+x+1]=I[b+x+1]+row}}
+  const out=new Uint8Array(w*h);
+  for(let y=0;y<h;y++){const y0=Math.max(0,y-r),y1=Math.min(h,y+r+1);
+    for(let x=0;x<w;x++){const x0=Math.max(0,x-r),x1=Math.min(w,x+r+1);
+      const s=I[y1*W1+x1]-I[y0*W1+x1]-I[y1*W1+x0]+I[y0*W1+x0];out[y*w+x]=s/((x1-x0)*(y1-y0))}}
+  return out;
+}
+function blobs(dark,w,h,minA,maxA){
+  const N=w*h,lab=new Int32Array(N),st=new Int32Array(N),out=[];let id=0;
+  for(let s=0;s<N;s++){
+    if(!dark[s]||lab[s])continue;
+    id++;let sp=0;st[sp++]=s;lab[s]=id;
+    let a=0,sx=0,sy=0,sxx=0,syy=0,sxy=0,x0=w,x1=0,y0=h,y1=0;
+    while(sp){const i=st[--sp],y=(i/w)|0,x=i-y*w;
+      a++;sx+=x;sy+=y;sxx+=x*x;syy+=y*y;sxy+=x*y;
+      if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;
+      if(x>0&&dark[i-1]&&!lab[i-1]){lab[i-1]=id;st[sp++]=i-1}
+      if(x<w-1&&dark[i+1]&&!lab[i+1]){lab[i+1]=id;st[sp++]=i+1}
+      if(y>0&&dark[i-w]&&!lab[i-w]){lab[i-w]=id;st[sp++]=i-w}
+      if(y<h-1&&dark[i+w]&&!lab[i+w]){lab[i+w]=id;st[sp++]=i+w}
+    }
+    if(a>=minA&&a<=maxA){const cx=sx/a,cy=sy/a;
+      out.push({id,a,cx,cy,x0,x1,y0,y1,vxx:sxx/a-cx*cx,vyy:syy/a-cy*cy,vxy:sxy/a-cx*cy})}
+  }
+  return {list:out,lab};
+}
+// ¿Parece uno de los cuadros negros de las esquinas?
+function cuadro(b,lab,dark,w){
+  const bw=b.x1-b.x0+1,bh=b.y1-b.y0+1;
+  if(Math.max(bw,bh)/Math.min(bw,bh)>1.9)return false;
+  const tr=b.vxx+b.vyy,det=b.vxx*b.vyy-b.vxy*b.vxy;if(det<=0)return false;
+  const d=Math.sqrt(Math.max(0,tr*tr/4-det)),l1=tr/2+d,l2=tr/2-d;
+  if(l2/l1<0.5)return false;
+  const solid=12*Math.sqrt(det)/b.a;if(solid<0.82||solid>1.7)return false;
+  let m=0;
+  for(let y=b.y0;y<=b.y1;y++)for(let x=b.x0;x<=b.x1;x++){if(lab[y*w+x]===b.id){const dx=x-b.cx,dy=y-b.cy,q=dx*dx+dy*dy;if(q>m)m=q}}
+  const ext=Math.sqrt(m)/Math.sqrt(b.a/Math.PI);
+  if(ext<1.08||ext>1.75)return false;
+  // oscuridad del centro (el cuadro con hueco tiene el centro claro)
+  const side=Math.sqrt(b.a),rc=Math.max(1.5,side*0.1);let tot=0,dk=0;
+  for(let y=Math.floor(b.cy-rc);y<=Math.ceil(b.cy+rc);y++)for(let x=Math.floor(b.cx-rc);x<=Math.ceil(b.cx+rc);x++){
+    if((x-b.cx)**2+(y-b.cy)**2<=rc*rc){tot++;if(dark[y*w+x])dk++}}
+  b.centro=tot?dk/tot:1;b.side=side;
+  return true;
+}
+function ordenar(c){ // sentido horario en pantalla (y hacia abajo)
+  const mx=c.reduce((s,p)=>s+p.cx,0)/4,my=c.reduce((s,p)=>s+p.cy,0)/4;
+  return c.slice().sort((p,q)=>Math.atan2(p.cy-my,p.cx-mx)-Math.atan2(q.cy-my,q.cx-mx));
+}
+function mejorCuarteto(c){
+  c=c.slice().sort((a,b)=>b.a-a.a).slice(0,12);
+  let best=null,bs=1e9;
+  const n=c.length;
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)for(let k=j+1;k<n;k++)for(let l=k+1;l<n;l++){
+    const q=[c[i],c[j],c[k],c[l]];
+    const amax=Math.max(...q.map(p=>p.a)),amin=Math.min(...q.map(p=>p.a));
+    if(amax/amin>2.6)continue;
+    const o=ordenar(q);
+    const L=[0,1,2,3].map(t=>Math.hypot(o[(t+1)%4].cx-o[t].cx,o[(t+1)%4].cy-o[t].cy));
+    // convexo
+    let sg=0,ok=true;
+    for(let t=0;t<4;t++){const a=o[t],b=o[(t+1)%4],d=o[(t+2)%4];const cr=(b.cx-a.cx)*(d.cy-b.cy)-(b.cy-a.cy)*(d.cx-b.cx);const s=cr>0?1:-1;if(sg===0)sg=s;else if(s!==sg){ok=false;break}}
+    if(!ok)continue;
+    const r1=L[0]/L[2],r2=L[1]/L[3];if(r1<0.6||r1>1.67||r2<0.6||r2>1.67)continue;
+    const A=(L[0]+L[2])/2,B=(L[1]+L[3])/2,lg=Math.max(A,B),sh=Math.min(A,B),rr=lg/sh;
+    if(rr<1.12||rr>1.62)continue;
+    const mk=Math.sqrt(q.reduce((s,p)=>s+p.a,0)/4)/sh;if(mk<0.03||mk>0.095)continue;
+    // las esquinas verdaderas son los cuatro cuadros más externos: se prefiere el cuadrilátero de mayor área
+    let pa=0;for(let t=0;t<4;t++){const a=o[t],b=o[(t+1)%4];pa+=a.cx*b.cy-b.cx*a.cy}pa=Math.abs(pa)/2;
+    const score=-pa/(1+Math.abs(Math.log(rr/1.334)));
+    if(score<bs){bs=score;best=q}
+  }
+  return best;
+}
+function homografia(src,dst){ // src (mm) -> dst (px)
+  const A=[],B=[];
+  for(let i=0;i<4;i++){const[u,v]=src[i],[x,y]=dst[i];
+    A.push([u,v,1,0,0,0,-u*x,-v*x]);B.push(x);
+    A.push([0,0,0,u,v,1,-u*y,-v*y]);B.push(y)}
+  for(let i=0;i<8;i++){let p=i;for(let r=i+1;r<8;r++)if(Math.abs(A[r][i])>Math.abs(A[p][i]))p=r;
+    [A[i],A[p]]=[A[p],A[i]];[B[i],B[p]]=[B[p],B[i]];
+    const d=A[i][i];if(Math.abs(d)<1e-12)return null;
+    for(let r=0;r<8;r++){if(r===i)continue;const f=A[r][i]/d;if(!f)continue;for(let c=i;c<8;c++)A[r][c]-=f*A[i][c];B[r]-=f*B[i]}}
+  return B.map((v,i)=>v/A[i][i]);
+}
+const proj=(h,u,v)=>{const z=h[6]*u+h[7]*v+1;return[(h[0]*u+h[1]*v+h[2])/z,(h[3]*u+h[4]*v+h[5])/z]};
+function bil(g,w,h,x,y){
+  if(x<0||y<0||x>=w-1||y>=h-1)return 255;
+  const x0=x|0,y0=y|0,fx=x-x0,fy=y-y0,i=y0*w+x0;
+  return(g[i]*(1-fx)+g[i+1]*fx)*(1-fy)+(g[i+w]*(1-fx)+g[i+w+1]*fx)*fy;
+}
+const ring=(r,n,ph)=>Array.from({length:n},(_,k)=>[r*Math.cos(ph+2*Math.PI*k/n),r*Math.sin(ph+2*Math.PI*k/n)]);
+const PIN=[[0,0]].concat(ring(0.7,5,0.3),ring(1.3,9,0.1),ring(1.9,13,0.5));
+const PCODE=[[0,0]].concat(ring(0.8,6,0.2),ring(1.6,10,0.4),ring(2.4,12,0.1)); // cuadro de 7 mm
+const PAN=ring(4.5,12,0.2).concat(ring(5.3,16,0.4));
+function medida(g,w,h,H,u,v,pat){let s=0;for(const[a,b]of pat){const[x,y]=proj(H,u+a,v+b);s+=bil(g,w,h,x,y)}return s/pat.length}
+function mediana(a){const s=a.slice().sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+
+const TH_MARK=0.20,TH_WEAK=0.10;
+// rgba: Uint8ClampedArray RGBA de un cuadro (w x h). Devuelve el resultado de la lectura.
+function analizar(rgba,w,h){
+  const N=w*h,g=toGray(rgba,N);
+  const r=Math.max(8,Math.round(Math.max(w,h)/12)),bg=boxMean(g,w,h,r);
+  const dark=new Uint8Array(N);
+  for(let i=0;i<N;i++)dark[i]=g[i]<bg[i]*0.55&&bg[i]>40?1:0;
+  const mn=Math.min(w,h),B=blobs(dark,w,h,Math.round((mn*0.02)**2),Math.round((mn*0.2)**2));
+  const cand=B.list.filter(b=>cuadro(b,B.lab,dark,w));
+  const res={ok:false,etapa:'esquinas',candidatos:cand.length,w,h};
+  if(cand.length<4)return res;
+  const q=mejorCuarteto(cand);
+  if(!q){res.etapa='esquinas';return res}
+  const o=ordenar(q);
+  res.esquinas=o.map(p=>({x:p.cx,y:p.cy}));
+  let k=0;for(let i=1;i<4;i++)if(o[i].centro<o[k].centro)k=i;
+  const otros=o.filter((_,i)=>i!==k).map(p=>p.centro);
+  if(!(o[k].centro<0.5&&Math.min(...otros)>0.7)){res.etapa='orientacion';return res}
+  const BR=o[k],BL=o[(k+1)%4],TL=o[(k+2)%4],TR=o[(k+3)%4];
+  const M=HX.MK;
+  const src=[[M,M],[HX.W-M,M],[HX.W-M,HX.H-M],[M,HX.H-M]];
+  const dst=[TL,TR,BR,BL].map(p=>[p.cx,p.cy]);
+  const Hm=homografia(src,dst);if(!Hm){res.etapa='geometria';return res}
+  res.esquinas=[TL,TR,BR,BL].map(p=>({x:p.cx,y:p.cy}));
+  // ---- bolitas ----
+  const medir=(u,v)=>{
+    const papel=medida(g,w,h,Hm,u,v,PAN),ink=medida(g,w,h,Hm,u,v,PIN);
+    return{papel,v:papel>1?Math.max(0,Math.min(1,1-ink/papel)):0}};
+  const sc=[],todos=[];let oscuro=0;
+  for(let qn=0;qn<HX.NQ;qn++){const fila=[];for(let o2=0;o2<4;o2++){const p=bubXY(qn,o2),m=medir(p.x,p.y);fila.push(m.v);todos.push(m.v);if(m.papel<45)oscuro++}sc.push(fila)}
+  if(oscuro>HX.NQ*2){res.etapa='luz';return res}
+  const base=mediana(todos);
+  let resp='';const flags=[],rel=[];
+  for(let qn=0;qn<HX.NQ;qn++){
+    const s=sc[qn].map(v=>v-base);rel.push(s);
+    const ord=[0,1,2,3].sort((a,b)=>s[b]-s[a]),s1=s[ord[0]],s2=s[ord[1]];
+    if(s1<TH_WEAK){resp+='-';flags.push('vac')}
+    else if(s2>=TH_WEAK&&s2>=0.5*s1){resp+='-';flags.push('doble')}
+    else{resp+=HX.OP[ord[0]];flags.push((s1<TH_MARK||s2>=TH_WEAK)?'dud':'ok')}
+  }
+  // tipo de examen
+  const ts=[0,1,2].map(i=>{const p=tpXY(i);return medir(p.x,p.y).v-base});
+  const to=[0,1,2].sort((a,b)=>ts[b]-ts[a]);let tipo=null;
+  if(ts[to[0]]>=TH_MARK&&(ts[to[1]]<TH_WEAK||ts[to[1]]<0.5*ts[to[0]]))tipo=to[0]+1;
+  // código de la hoja: cuadros negros de 7 mm; el papel de referencia viene de las bolitas cercanas
+  const refs=[0,1,2].map(i=>{const p=tpXY(i);return medir(p.x,p.y).papel}).concat([[0,0],[10,0]].map(([qq,oo])=>{const p=bubXY(qq,oo);return medir(p.x,p.y).papel}));
+  const papelC=refs.reduce((a,b)=>a+b,0)/refs.length;
+  const bits2=[];
+  for(let i=0;i<HX.idN;i++){const p=idXY(i),ink=medida(g,w,h,Hm,p.x,p.y,PCODE);
+    bits2.push(papelC>1&&(1-ink/papelC)>0.4?1:0)}
+  let code=codeOk(bits2);
+  res.ok=true;res.etapa='ok';res.codigo=code>0?code:0;res.tipo=tipo;res.resp=resp;res.flags=flags;res.rel=rel;res.tipoSc=ts;res.base=base;
+  res.dudas=flags.filter(f=>f==='dud'||f==='doble').length;
+  return res;
+}
+return{analizar,HX,codeBits,codeOk};
+})();
+
+</script>
+<script>
+'use strict';
+/* ====================== utilidades ====================== */
+const KEY='calificated_cel_v1';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const malo=k=>k==='__proto__'||k==='constructor'||k==='prototype';
+const pad2=n=>String(n).padStart(2,'0');
+const hoyStr=()=>{const d=new Date();return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())};
+const fmtF=f=>{if(!f)return '';const a=f.split('-');return a[2]+'/'+a[1]+'/'+a[0]};
+const fmtTS=ms=>{if(!ms)return '';const d=new Date(ms);return pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+' '+pad2(d.getHours())+':'+pad2(d.getMinutes())};
+let toastT=null;
+function toast(t,ms){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),ms||2200)}
+function beep(){try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=880;g.gain.value=.08;o.connect(g);g.connect(a.destination);o.start();setTimeout(()=>{o.stop();a.close()},110)}catch(e){}try{navigator.vibrate&&navigator.vibrate(50)}catch(e){}}
+
+/* ====================== estado ====================== */
+function nuevoEstado(){return{v:1,dev:'c'+Math.random().toString(36).slice(2,7),cat:null,asis:{},lect:{},ui:{g:'',p:1,fecha:'',modo:'uno',auto:false,hg:'',hp:1},exp:{asis:0,lect:0}}}
+let S=(()=>{try{const o=JSON.parse(localStorage.getItem(KEY));if(o&&o.v===1&&o.asis&&o.lect&&o.ui)return o}catch(e){}return nuevoEstado()})();
+let memOnly=false;
+function guardar(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!memOnly){memOnly=true;toast('Este navegador no deja guardar. Comparte tus archivos antes de cerrar.',4000)}}}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+
+/* ====================== catálogo (viene del respaldo .json de la PC) ====================== */
+const CAMPOS_BASE=['asist','punt','just','comp','part','tarea','trab','nota','sello'];
+function catalogoDeRespaldo(db){
+  if(!db||typeof db!=='object'||!db.groups||typeof db.groups!=='object')throw new Error('no es un respaldo de CALIFICATED');
+  const cat={imp:Date.now(),ts:+db.ts||0,escuela:'',profesor:'',parcial:[2,3].includes(+db.parcial)?+db.parcial:1,pcfg:{},grupos:{},hojas:{},base:{},lecBase:{}};
+  const aj=db.ajustes||{};cat.escuela=String(aj.escuela||'');cat.profesor=String(aj.profesor||'');
+  [1,2,3].forEach(p=>{const c=(db.pcfg||{})[p];if(c&&typeof c==='object')cat.pcfg[p]={ini:String(c.ini||''),fin:String(c.fin||'')}});
+  Object.keys(db.groups).forEach(gn=>{
+    const g=db.groups[gn];if(malo(gn)||!g||!Array.isArray(g.students))return;
+    const G={alumnos:g.students.map(String),claves:{}};cat.base[gn]={};cat.lecBase[gn]={};
+    [1,2,3].forEach(p=>{
+      const st=p===1?g:((g.parciales||{})[p]||{});
+      const cl=((st.examen||{}).claves)||{};G.claves[p]={};
+      [1,2,3].forEach(t=>{let c=String(cl[t]||'').toUpperCase().replace(/[^ABCD*_]/g,'');G.claves[p][t]=(c+'_'.repeat(20)).slice(0,20)});
+      const rec=st.records||{},out={};
+      Object.keys(rec).forEach(f=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(f)||!rec[f]||typeof rec[f]!=='object')return;
+        const d={};Object.keys(rec[f]).forEach(a=>{if(malo(a))return;const r=rec[f][a];if(!r||typeof r!=='object')return;
+          const o={};CAMPOS_BASE.forEach(k=>{if(r[k]!==undefined&&r[k]!=='')o[k]=String(r[k])});d[a]=o});out[f]=d});
+      cat.base[gn][p]=out;
+      const lec=((st.examen||{}).lect)||{},lo={};
+      Object.keys(lec).forEach(a=>{if(!malo(a)&&lec[a]&&typeof lec[a].r==='string')lo[a]=lec[a].r});
+      cat.lecBase[gn][p]=lo;
+    });
+    cat.grupos[gn]=G;
+  });
+  if(!Object.keys(cat.grupos).length)throw new Error('el respaldo no tiene grupos');
+  Object.keys(db.hojas||{}).forEach(c=>{const h=db.hojas[c];if(/^\d+$/.test(c)&&h&&typeof h.g==='string'&&h.s&&cat.grupos[h.g])cat.hojas[c]={g:h.g,p:+h.p||1,s:String(h.s)}});
+  return cat;
+}
+const grupos=()=>S.cat?Object.keys(S.cat.grupos):[];
+const alumnosDe=g=>(S.cat&&S.cat.grupos[g])?S.cat.grupos[g].alumnos:[];
+function parcialDeFecha(f){if(!S.cat)return 1;for(let p=1;p<=3;p++){const c=S.cat.pcfg[p];if(c&&c.ini&&c.fin&&f>=c.ini&&f<=c.fin)return p}return S.cat.parcial||1}
+function reconciliar(){ // quita lo pendiente que la PC ya trae igual
+  Object.keys(S.asis).forEach(k=>{const e=S.asis[k];if(avBase(e.g,e.p,e.f,e.s)===e.v)delete S.asis[k]});
+  Object.keys(S.lect).forEach(k=>{const e=S.lect[k];const b=(((S.cat.lecBase[e.g]||{})[e.p])||{})[e.s];if(b===e.resp)delete S.lect[k]});
+}
+
+/* ====================== NOMBRAR LISTA ====================== */
+const avDeRec=r=>!r?'':r.asist==='F'?'F':r.asist==='J'?'J':r.asist==='P'?(r.punt==='R'?'R':'A'):'';
+const baseRec=(g,p,f,s)=>{const b=S.cat&&S.cat.base[g];return b&&b[p]&&b[p][f]?b[p][f][s]:null};
+const avBase=(g,p,f,s)=>avDeRec(baseRec(g,p,f,s));
+const kAsis=(g,p,f,s)=>g+'|'+p+'|'+f+'|'+s;
+function estado(g,p,f,s){const e=S.asis[kAsis(g,p,f,s)];return e?e.v:avBase(g,p,f,s)}
+function marcar(g,p,f,s,v){
+  const k=kAsis(g,p,f,s),act=estado(g,p,f,s);
+  if(act===v)v=''; // tocar lo mismo lo quita
+  S.asis[k]={g,p:+p,f,s,v,ts:Date.now()};guardar();return v;
+}
+const ETQ_A={A:'Presente',R:'Retardo',F:'Falta',J:'Justificada','':'Sin pasar'};
+let idxUno=0;
+function selLista(){return{g:$('l-g').value,p:+$('l-p').value,f:$('l-f').value||hoyStr()}}
+function renderLista(){
+  const vacio=$('lista-vacio'),app=$('lista-app');
+  if(!S.cat){vacio.classList.remove('hide');app.classList.add('hide');vacio.innerHTML='<div style="font-size:40px">📋</div><h3 style="margin:6px 0">Aún no hay grupos</h3><p>Trae el respaldo de tu PC para cargar tus grupos y alumnos.</p><button class="big" data-ir="datos">Ir a Datos</button>';return}
+  vacio.classList.add('hide');app.classList.remove('hide');
+  const {g,p,f}=selLista(),als=alumnosDe(g);
+  const cuenta={A:0,R:0,F:0,J:0,'':0};als.forEach(a=>cuenta[estado(g,p,f,a)]++);
+  const hechos=als.length-cuenta[''];
+  $('l-res').innerHTML=`<div class="row" style="justify-content:space-between"><b>${esc(g)} · ${fmtF(f)}</b><span class="mut">${hechos} de ${als.length}</span></div>
+   <div class="bar"><i style="width:${als.length?hechos/als.length*100:0}%"></i></div>
+   <div class="chips" style="margin-top:6px"><span class="chip A">${cuenta.A} presentes</span><span class="chip R">${cuenta.R} retardos</span><span class="chip F">${cuenta.F} faltas</span><span class="chip J">${cuenta.J} justif.</span>${cuenta['']?`<span class="chip">${cuenta['']} sin pasar</span>`:''}</div>
+   ${cuenta['']?`<div style="margin-top:8px"><button class="sec" data-act="todos" style="min-height:40px">Marcar presentes a los que faltan por pasar</button></div>`:''}`;
+  document.querySelectorAll('.seg button[data-modo]').forEach(b=>b.classList.toggle('on',b.dataset.modo===S.ui.modo));
+  const cu=$('l-cuerpo');
+  if(!als.length){cu.innerHTML='<div class="card vacio"><p>Este grupo no tiene alumnos.</p></div>';return}
+  if(S.ui.modo==='lista'){
+    cu.innerHTML='<div class="card">'+als.map((a,i)=>{const v=estado(g,p,f,a);
+      return `<div class="al"><span class="n">${i+1}</span><span class="nm">${esc(a)}</span><span class="bt">${['A','R','F','J'].map(c=>`<button data-m="${c}" data-i="${i}" class="${c} ${v===c?'on':''}" aria-label="${ETQ_A[c]}">${({A:'✓',R:'R',F:'✗',J:'J'})[c]}</button>`).join('')}</span></div>`}).join('')+'</div>';
+  }else{
+    if(idxUno>=als.length)idxUno=als.length-1;if(idxUno<0)idxUno=0;
+    const todos=cuenta['']===0,a=als[idxUno],v=estado(g,p,f,a);
+    cu.innerHTML=`<div class="card uno"><div class="cnt">Alumno ${idxUno+1} de ${als.length}</div>
+      <div class="nombre">${esc(a)}</div>
+      ${v?`<div style="margin-bottom:10px"><span class="chip ${v}">${ETQ_A[v]}</span></div>`:''}
+      <div class="grid4">
+        <button data-m="A" class="${v==='A'?'b-A':''}" style="${v==='A'?'':'background:var(--okbg);color:var(--ok)'}">✓ Presente</button>
+        <button data-m="R" class="${v==='R'?'b-R':''}" style="${v==='R'?'':'background:var(--warnbg);color:var(--warn)'}">⏱ Retardo</button>
+        <button data-m="F" class="${v==='F'?'b-F':''}" style="${v==='F'?'':'background:var(--badbg);color:var(--bad)'}">✗ Falta</button>
+        <button data-m="J" class="${v==='J'?'b-J':''}" style="${v==='J'?'':'background:var(--infbg);color:var(--inf)'}">J Justificada</button>
+      </div>
+      <div class="nav2"><button class="sec" data-nav="-1">◀ Anterior</button><button class="sec" data-nav="1">Siguiente ▶</button></div>
+      ${todos?'<div class="msg g" style="margin-top:12px">Lista completa ✔ Ya puedes compartirla desde la pestaña Datos.</div>':''}</div>`;
+  }
+}
+$('l-cuerpo').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;const {g,p,f}=selLista(),als=alumnosDe(g);
+  if(b.dataset.nav){idxUno=(idxUno+ +b.dataset.nav+als.length)%als.length;renderLista();return}
+  if(b.dataset.m){
+    const i=b.dataset.i!==undefined?+b.dataset.i:idxUno,a=als[i];if(a===undefined)return;
+    const nv=marcar(g,p,f,a,b.dataset.m);
+    if(b.dataset.i===undefined){ // modo una por una: avanza al siguiente sin pasar
+      if(nv){let j=idxUno,hall=false;for(let k=1;k<=als.length;k++){const c=(idxUno+k)%als.length;if(!estado(g,p,f,als[c])){j=c;hall=true;break}}idxUno=hall?j:Math.min(als.length-1,idxUno+1)}
+    }
+    renderLista();renderDatos();
+  }
+});
+$('l-res').addEventListener('click',e=>{
+  if(e.target.closest('[data-act=todos]')){const {g,p,f}=selLista();let n=0;alumnosDe(g).forEach(a=>{if(!estado(g,p,f,a)){marcar(g,p,f,a,'A');n++}});toast(n+' alumno(s) marcados presentes');renderLista();renderDatos()}
+});
+document.querySelector('.seg').addEventListener('click',e=>{const b=e.target.closest('button[data-modo]');if(!b)return;S.ui.modo=b.dataset.modo;guardar();renderLista()});
+['l-g','l-p','l-f'].forEach(id=>$(id).addEventListener('change',()=>{
+  if(id==='l-f'){const p=parcialDeFecha($('l-f').value);$('l-p').value=p}
+  S.ui.g=$('l-g').value;S.ui.p=+$('l-p').value;S.ui.fecha=$('l-f').value;guardar();idxUno=0;renderLista()}));
+
+/* ====================== HOJAS: lectura y revisión ====================== */
+const claveDe=(g,p,t)=>{const c=S.cat&&S.cat.grupos[g]&&S.cat.grupos[g].claves[p]&&S.cat.grupos[g].claves[p][t];return(c&&c.length===20&&!c.includes('_'))?c:null};
+const aciertosDe=(resp,cl)=>{let a=0;for(let i=0;i<20;i++)if(cl[i]==='*'||resp[i]===cl[i])a++;return a};
+const califDe=a=>Math.round(a/20*100)/10;
+const kLect=(g,p,s)=>g+'|'+p+'|'+s;
+function renderHojas(){
+  const vacio=$('hojas-vacio'),app=$('hojas-app');
+  if(!S.cat){vacio.classList.remove('hide');app.classList.add('hide');vacio.innerHTML='<div style="font-size:40px">📄</div><h3 style="margin:6px 0">Aún no hay grupos</h3><p>Trae el respaldo de tu PC: ahí vienen los alumnos, las claves y los códigos de las hojas impresas.</p><button class="big" data-ir="datos">Ir a Datos</button>';return}
+  vacio.classList.add('hide');app.classList.remove('hide');
+  const g=$('h-g').value,p=+$('h-p').value,als=alumnosDe(g);let leidos=0;
+  const filas=als.map((a,i)=>{const e=S.lect[kLect(g,p,a)];if(e)leidos++;
+    let der='<span class="tag">sin leer</span>';
+    if(e){const cl=claveDe(g,p,e.t);der=cl?`<span class="sc">${califDe(aciertosDe(e.resp,cl)).toFixed(1)}</span>`:'<span class="tag w">sin clave</span>'}
+    return `<div class="lr" data-al="${i}"><span class="n">${i+1}</span><span class="nm">${esc(a)}</span>${e?`<span class="tag">Tipo ${e.t||'?'}</span>`:''}${der}</div>`}).join('');
+  $('l-lect').innerHTML=(als.length?`<div class="mut" style="margin-bottom:4px">${leidos} de ${als.length} hojas leídas · toca un alumno para ver o corregir su hoja</div>`+filas:'<div class="mut">Este grupo no tiene alumnos.</div>');
+}
+$('h-g').addEventListener('change',()=>{S.ui.hg=$('h-g').value;guardar();renderHojas()});
+$('h-p').addEventListener('change',()=>{S.ui.hp=+$('h-p').value;guardar();renderHojas()});
+$('l-lect').addEventListener('click',e=>{const r=e.target.closest('[data-al]');if(!r)return;abrirRevisionAlumno($('h-g').value,+$('h-p').value,+r.dataset.al)});
+$('btn-manual').onclick=()=>abrirRev({code:0,g:$('h-g').value,p:+$('h-p').value,s:'',t:0,resp:Array(20).fill('-'),flags:Array(20).fill(''),origen:'manual'});
+
+/* ---- revisión ---- */
+let R=null,camPausada=false;
+function abrirRevisionAlumno(g,p,i){
+  const s=alumnosDe(g)[i],e=S.lect[kLect(g,p,s)];
+  abrirRev(e?{code:e.code||0,g,p,s,t:e.t,resp:e.resp.split(''),flags:Array(20).fill(''),origen:'lista',fijo:true}:{code:0,g,p,s,t:0,resp:Array(20).fill('-'),flags:Array(20).fill(''),origen:'lista',fijo:true});
+}
+function abrirRev(r){R=r;camPausada=true;$('sheet').classList.remove('hide');pintarRev()}
+function pintarRev(){
+  const hoja=R.code&&S.cat.hojas[R.code];
+  const idOK=hoja&&R.origen==='scan'&&!R.cambiar;
+  let quien='';
+  if(idOK||(R.fijo&&R.s)){
+    quien=`<div class="row"><div style="flex:1"><div style="font-size:20px;font-weight:800;line-height:1.2">${esc(R.s)}</div><div class="mut">${esc(R.g)} · Parcial ${R.p}${R.code?' · Hoja '+String(R.code).padStart(5,'0'):''}</div></div>${R.origen==='scan'?'<button class="sec" data-rv="cambiar" style="min-height:38px;font-size:13px">Cambiar</button>':''}</div>`;
+  }else{
+    quien=`<div class="row"><label>Grupo<select id="rv-g">${grupos().map(x=>`<option ${x===R.g?'selected':''}>${esc(x)}</option>`).join('')}</select></label>
+      <label>Parcial<select id="rv-p">${[1,2,3].map(x=>`<option value="${x}" ${x===R.p?'selected':''}>Parcial ${x}</option>`).join('')}</select></label></div>
+      <div style="margin-top:8px"><label class="mut" style="display:block">Alumno<select id="rv-s"><option value="">— elige —</option>${alumnosDe(R.g).map(a=>`<option ${a===R.s?'selected':''}>${esc(a)}</option>`).join('')}</select></label></div>
+      ${R.code?`<div class="mut" style="margin-top:4px">Hoja ${String(R.code).padStart(5,'0')}${hoja?'':' (no está registrada en este respaldo)'}</div>`:''}`;
+  }
+  $('rv-quien').innerHTML=quien;
+  $('rv-tipo').innerHTML=[1,2,3].map(t=>`<button data-t="${t}" class="${R.t===t?'on':'sec'}" style="min-height:42px">${t}</button>`).join('');
+  pintarScore();
+}
+function pintarScore(){
+  const cl=R.t?claveDe(R.g,R.p,R.t):null;let ac=null;
+  if(cl)ac=aciertosDe(R.resp.join(''),cl);
+  $('rv-score').innerHTML=cl?`<div class="score"><b>${califDe(ac).toFixed(1)}</b><span>${ac} de 20 aciertos</span></div>`:`<div class="score"><b>—</b><span>${R.t?'falta la clave del tipo '+R.t+' de '+esc(R.g)+' (Parcial '+R.p+'): captúrala en la PC':'elige el tipo de examen'}</span></div>`;
+  $('rv-grid').innerHTML=R.resp.map((c,i)=>{
+    let cls='';if(cl&&c!=='-')cls=(cl[i]==='*'||c===cl[i])?'good':'wrong';else if(cl&&c==='-')cls='wrong';
+    if(R.flags[i]==='dud'||R.flags[i]==='doble')cls+=' dud';
+    return `<div class="cell ${cls}" data-q="${i}"><small>${i+1}</small>${c==='-'?'·':c}</div>`}).join('');
+  const dudas=R.flags.filter(f=>f==='dud'||f==='doble').length,blancos=R.resp.filter(c=>c==='-').length;
+  let m='';
+  if(dudas)m+=`<div class="msg w">${dudas} pregunta(s) con duda (borde punteado): revísalas contra la hoja.</div>`;
+  if(blancos&&R.origen!=='lista')m+=`<div class="msg i">${blancos} sin respuesta.</div>`;
+  if(R.origen==='scan'&&!R.code)m+=`<div class="msg b">No se pudo leer el código de la hoja: elige de quién es.</div>`;
+  const ya=R.s&&S.lect[kLect(R.g,R.p,R.s)];
+  if(ya&&R.origen!=='lista')m+=`<div class="msg w">Ya hay una lectura de este alumno; al guardar se reemplaza.</div>`;
+  $('rv-msg').innerHTML=m;
+  $('rv-save').disabled=!(R.s&&R.t&&R.g);
+  $('rv-save').textContent=R.s&&R.t?'Guardar':(!R.s?'Elige al alumno':'Elige el tipo de examen');
+}
+$('sheet').addEventListener('click',e=>{
+  const t=e.target.closest('[data-t]');if(t){R.t=+t.dataset.t;pintarRev();return}
+  const q=e.target.closest('[data-q]');if(q){const i=+q.dataset.q,o=['A','B','C','D','-'];R.resp[i]=o[(o.indexOf(R.resp[i])+1)%5];R.flags[i]='';pintarScore();return}
+  if(e.target.closest('[data-rv=cambiar]')){R.cambiar=true;R.s='';pintarRev()}
+});
+$('sheet').addEventListener('change',e=>{
+  if(e.target.id==='rv-g'){R.g=e.target.value;R.s='';pintarRev()}
+  else if(e.target.id==='rv-p'){R.p=+e.target.value;pintarRev()}
+  else if(e.target.id==='rv-s'){R.s=e.target.value;pintarScore()}
+});
+function cerrarRev(){$('sheet').classList.add('hide');R=null;camPausada=false}
+$('rv-cancel').onclick=cerrarRev;
+$('rv-save').onclick=()=>{guardarLectura(R);cerrarRev()};
+function guardarLectura(r,silencio){
+  const resp=r.resp.join('');
+  const reg=r.code&&S.cat.hojas[r.code];
+  S.lect[kLect(r.g,r.p,r.s)]={code:(reg&&reg.s===r.s&&reg.g===r.g&&reg.p===r.p)?r.code:0,g:r.g,p:r.p,s:r.s,t:r.t,resp,f:hoyStr(),ts:Date.now()};
+  guardar();renderHojas();renderDatos();
+  const cl=claveDe(r.g,r.p,r.t);
+  toast(r.s+(cl?' · '+califDe(aciertosDe(resp,cl)).toFixed(1):' · guardada (sin clave)'),silencio?2600:2000);
+}
+
+/* ---- cámara ---- */
+const cam={stream:null,timer:null,corriendo:false,estab:{k:'',n:0},bloq:{code:0,hastaSinHoja:false,tSin:0},torch:false};
+const MSG={esquinas:'Encuadra la hoja: deben verse los 4 cuadros negros de las esquinas',orientacion:'No distingo la esquina con cuadro hueco (abajo a la derecha)',luz:'Hay muy poca luz',geometria:'Acomoda la hoja de frente'};
+function hint(t,ok){const h=$('cam-hint');h.textContent=t;h.classList.toggle('ok',!!ok)}
+async function abrirCamara(){
+  $('cam-err').classList.add('hide');
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){errCam('Este navegador no permite abrir la cámara aquí. Usa “Tomar foto”.');return}
+  try{
+    cam.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});
+  }catch(e){errCam(e&&e.name==='NotAllowedError'?'Permiso de cámara negado. Actívalo en los ajustes del navegador o usa “Tomar foto”.':'No se pudo abrir la cámara. Usa “Tomar foto”.');return}
+  const v=$('vid');v.srcObject=cam.stream;try{await v.play()}catch(e){}
+  $('cam-idle').classList.add('hide');$('cam-live').classList.remove('hide');
+  const tr=cam.stream.getVideoTracks()[0],caps=tr.getCapabilities?tr.getCapabilities():{};
+  $('btn-torch').classList.toggle('hide',!caps.torch);cam.torch=false;
+  const ajusta=()=>{const b=document.querySelector('.vidbox');if(v.videoWidth)b.style.aspectRatio=v.videoWidth+'/'+v.videoHeight};
+  v.addEventListener('loadedmetadata',ajusta);ajusta();
+  cam.corriendo=true;cam.estab={k:'',n:0};cam.bloq={code:0,tSin:0,libre:true};hint('Encuadra la hoja completa');
+  bucle();
+}
+function errCam(t){const e=$('cam-err');e.textContent=t;e.classList.remove('hide')}
+function cerrarCamara(){
+  cam.corriendo=false;clearTimeout(cam.timer);
+  if(cam.stream){cam.stream.getTracks().forEach(t=>t.stop());cam.stream=null}
+  $('vid').srcObject=null;$('cam-live').classList.add('hide');$('cam-idle').classList.remove('hide');
+}
+$('btn-cam').onclick=abrirCamara;$('btn-stop').onclick=cerrarCamara;
+$('btn-torch').onclick=async()=>{try{cam.torch=!cam.torch;await cam.stream.getVideoTracks()[0].applyConstraints({advanced:[{torch:cam.torch}]})}catch(e){cam.torch=false}};
+$('chk-auto').onchange=e=>{S.ui.auto=e.target.checked;guardar()};
+const cvs=document.createElement('canvas'),cx=cvs.getContext('2d',{willReadFrequently:true});
+function dibujaOv(q,ok){
+  const ov=$('ov'),v=$('vid'),W=ov.clientWidth,H=ov.clientHeight;if(ov.width!==W||ov.height!==H){ov.width=W;ov.height=H}
+  const c=ov.getContext('2d');c.clearRect(0,0,W,H);if(!q||!v.videoWidth)return;
+  const vw=v.videoWidth,vh=v.videoHeight,k=Math.min(W/vw,H/vh),ox=(W-vw*k)/2,oy=(H-vh*k)/2;
+  c.lineWidth=4;c.strokeStyle=ok?'#2ecc71':'#f5b301';c.beginPath();
+  q.forEach((p,i)=>{const x=ox+p.x*q.sx*k,y=oy+p.y*q.sy*k;i?c.lineTo(x,y):c.moveTo(x,y)});c.closePath();c.stroke();
+}
+function bucle(){
+  if(!cam.corriendo)return;
+  const v=$('vid');
+  if(camPausada||v.readyState<2||!v.videoWidth){cam.timer=setTimeout(bucle,250);return}
+  const L=1440,k=Math.min(1,L/Math.max(v.videoWidth,v.videoHeight)),w=Math.round(v.videoWidth*k),h=Math.round(v.videoHeight*k);
+  if(cvs.width!==w||cvs.height!==h){cvs.width=w;cvs.height=h}
+  cx.drawImage(v,0,0,w,h);
+  const t0=performance.now();let res;
+  try{res=Lector.analizar(cx.getImageData(0,0,w,h).data,w,h)}catch(e){res={ok:false,etapa:'esquinas'}}
+  const sx=v.videoWidth/w,sy=v.videoHeight/h;
+  if(res.esquinas){const q=res.esquinas.slice();q.sx=sx;q.sy=sy;dibujaOv(q,res.ok&&res.codigo>0)}else dibujaOv(null);
+  const ahora=Date.now();
+  if(res.ok&&res.codigo>0){
+    hint(res.dudas?'Leyendo… mantén firme':'Leyendo… mantén firme',false);
+    if(cam.bloq.code===res.codigo&&!cam.bloq.libre){hint('Hoja '+String(res.codigo).padStart(5,'0')+' ya leída: muestra la siguiente',true)}
+    else{
+      const key=res.codigo+'|'+res.tipo+'|'+res.resp;
+      if(key===cam.estab.k)cam.estab.n++;else cam.estab={k:key,n:1};
+      if(cam.estab.n>=3){aceptarLectura(res);cam.estab={k:'',n:0}}
+    }
+  }else{
+    cam.estab={k:'',n:0};
+    if(!cam.bloq.tSin)cam.bloq.tSin=ahora;
+    if(ahora-cam.bloq.tSin>700)cam.bloq.libre=true;
+    hint(res.ok?'No leo el código de la hoja: acércate un poco o mejora la luz':(MSG[res.etapa]||MSG.esquinas),false);
+  }
+  if(res.ok&&res.codigo>0){cam.bloq.tSin=0}
+  const dt=performance.now()-t0;
+  cam.timer=setTimeout(bucle,Math.max(90,160-dt));
+}
+function aceptarLectura(res){
+  beep();
+  const reg=S.cat.hojas[res.codigo];
+  const r={code:res.codigo,g:reg?reg.g:$('h-g').value,p:reg?reg.p:+$('h-p').value,s:reg?reg.s:'',t:res.tipo||0,resp:res.resp.split(''),flags:res.flags.slice(),origen:'scan'};
+  cam.bloq={code:res.codigo,libre:false,tSin:0};
+  if(S.ui.auto&&reg&&r.t&&!res.dudas){guardarLectura(r,true);hint('✔ '+r.s,true);return}
+  abrirRev(r);
+}
+/* ---- foto fija ---- */
+async function leerImagen(file){
+  if(!file)return;toast('Leyendo la imagen…',1500);
+  try{
+    let bmp;try{bmp=await createImageBitmap(file,{imageOrientation:'from-image'})}catch(e){bmp=await createImageBitmap(file)}
+    const k=Math.min(1,1700/Math.max(bmp.width,bmp.height)),w=Math.round(bmp.width*k),h=Math.round(bmp.height*k);
+    cvs.width=w;cvs.height=h;cx.drawImage(bmp,0,0,w,h);if(bmp.close)bmp.close();
+    const res=Lector.analizar(cx.getImageData(0,0,w,h).data,w,h);
+    if(!res.ok){errCam((MSG[res.etapa]||MSG.esquinas)+'. Intenta otra foto, de frente y con buena luz, o usa “Captura a mano”.');return}
+    $('cam-err').classList.add('hide');
+    const reg=res.codigo&&S.cat.hojas[res.codigo];
+    abrirRev({code:res.codigo,g:reg?reg.g:$('h-g').value,p:reg?reg.p:+$('h-p').value,s:reg?reg.s:'',t:res.tipo||0,resp:res.resp.split(''),flags:res.flags.slice(),origen:'scan'});
+  }catch(e){errCam('No se pudo leer esa imagen.')}
+}
+$('f-foto').onchange=e=>{leerImagen(e.target.files[0]);e.target.value=''};
+$('f-img').onchange=e=>{leerImagen(e.target.files[0]);e.target.value=''};
+
+/* ====================== DATOS: traer de la PC / enviar a la PC ====================== */
+const csvCell=v=>{v=String(v==null?'':v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+const ETQ_CSV={comp:{OK:'OK',BAD:'BAD'},part:{OK:'OK',BAD:'BAD'},tarea:{OK:'OK',BAD:'BAD'},trab:{OK:'OK',BAD:'BAD'}};
+function csvAsistencias(){
+  const cab=['grupo','fecha','alumno','asistencia','puntualidad','comportamiento','participacion','tarea','trabajo','observacion','cuadernillo_limite','cuadernillo_entrega','cuadernillo_revision_0a10','justificacion','parcial','profesor','escuela','sello'];
+  const filas=[];
+  Object.values(S.asis).sort((a,b)=>(a.g+a.p+a.f).localeCompare(b.g+b.p+b.f)||(alumnosDe(a.g).indexOf(a.s)-alumnosDe(b.g).indexOf(b.s))).forEach(e=>{
+    const b=baseRec(e.g,e.p,e.f,e.s)||{},falta=(e.v==='F'||e.v==='J');
+    const lab=k=>falta?'':(ETQ_CSV[k][b[k]]||'');
+    filas.push([e.g,e.f,e.s,{A:'Asistió',R:'Asistió',F:'Falta',J:'Justificada'}[e.v]||'',{A:'A tiempo',R:'Retardo'}[e.v]||'',lab('comp'),lab('part'),lab('tarea'),lab('trab'),b.nota||'','','','',e.v==='A'||e.v==='R'?'':(b.just||''),e.p,S.cat.profesor,S.cat.escuela,b.sello==='OK'||b.sello==='BAD'?b.sello:'']);
+  });
+  return{filas:filas.length,txt:'﻿'+[cab].concat(filas).map(r=>r.map(csvCell).join(',')).join('\r\n')};
+}
+function csvLecturas(){
+  const cab=['hoja','grupo','parcial','alumno','tipo','respuestas','fecha','aciertos','calificacion'];
+  const filas=Object.values(S.lect).sort((a,b)=>(a.g+a.p).localeCompare(b.g+b.p)||(alumnosDe(a.g).indexOf(a.s)-alumnosDe(b.g).indexOf(b.s))).map(e=>{
+    const cl=claveDe(e.g,e.p,e.t),ac=cl?aciertosDe(e.resp,cl):'';
+    return[e.code?String(e.code):'',e.g,e.p,e.s,e.t,e.resp,e.f,ac,ac===''?'':califDe(ac).toFixed(1)]});
+  return{filas:filas.length,txt:'﻿'+[cab].concat(filas).map(r=>r.map(csvCell).join(',')).join('\r\n')};
+}
+async function enviar(nombre,txt,clave){
+  const file=new File([txt],nombre,{type:'text/csv'});
+  try{
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:nombre});S.exp[clave]=Date.now();guardar();renderDatos();return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=nombre;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  S.exp[clave]=Date.now();guardar();renderDatos();toast('Archivo descargado: envíalo a tu WhatsApp desde Descargas',3500);
+}
+function renderDatos(){
+  const c=S.cat;
+  if(!c)$('d-pc').innerHTML=`<h4>1 · Traer datos de la PC</h4><p class="mut">Todavía no hay datos. Pasos abajo.</p><button class="big" data-act="resp">📥 Elegir respaldo (.json)</button>`;
+  else{
+    const ng=Object.keys(c.grupos).length,na=Object.values(c.grupos).reduce((s,g)=>s+g.alumnos.length,0);
+    let ck=0,tot=0;Object.values(c.grupos).forEach(g=>[1,2,3].forEach(p=>[1,2,3].forEach(t=>{const x=g.claves[p][t];if(x&&x!=='_'.repeat(20)){tot++;if(!x.includes('_'))ck++}})));
+    $('d-pc').innerHTML=`<h4>1 · Datos de la PC</h4>
+     <div class="kv"><span>Respaldo de la PC</span><span>${c.ts?fmtTS(c.ts):'—'}</span></div>
+     <div class="kv"><span>Traído al celular</span><span>${fmtTS(c.imp)}</span></div>
+     <div class="kv"><span>Profesor(a)</span><span>${esc(c.profesor)||'—'}</span></div>
+     <div class="kv"><span>Escuela</span><span>${esc(c.escuela)||'—'}</span></div>
+     <div class="kv"><span>Grupos · alumnos</span><span>${ng} · ${na}</span></div>
+     <div class="kv"><span>Claves completas</span><span>${ck}${tot>ck?' (+'+(tot-ck)+' incompletas)':''}</span></div>
+     <div class="kv"><span>Hojas impresas registradas</span><span>${Object.keys(c.hojas).length}</span></div>
+     <div style="margin-top:10px"><button class="sec" data-act="resp" style="width:100%">📥 Actualizar con un respaldo nuevo</button></div>`;
+  }
+  const A=csvAsistencias(),Lc=csvLecturas(),na=Object.keys(S.asis).length,nl=Object.keys(S.lect).length;
+  $('d-env').innerHTML=`<h4>2 · Enviar a la PC</h4>
+   <div class="kv"><span>Asistencias por enviar</span><span><b>${na}</b>${S.exp.asis?' · último envío '+fmtTS(S.exp.asis):''}</span></div>
+   <div class="kv"><span>Hojas leídas por enviar</span><span><b>${nl}</b>${S.exp.lect?' · último envío '+fmtTS(S.exp.lect):''}</span></div>
+   <div class="row" style="margin-top:10px"><button data-act="env-asis" style="flex:1" ${na?'':'disabled'}>📤 Asistencias (.csv)</button><button data-act="env-lect" style="flex:1" ${nl?'':'disabled'}>📤 Hojas leídas (.csv)</button></div>
+   <div class="mut" style="margin-top:8px">Se abre el menú de compartir: elige WhatsApp (tu propio chat) o Drive. Lo ya enviado se limpia solo cuando traes un respaldo nuevo de la PC que ya lo incluye.</div>`;
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-act]');
+  if(a){
+    if(a.dataset.act==='resp')$('f-resp').click();
+    if(a.dataset.act==='env-asis'&&S.cat){const x=csvAsistencias();enviar('asistencias_CELULAR_'+hoyStr()+'.csv',x.txt,'asis')}
+    if(a.dataset.act==='env-lect'&&S.cat){const x=csvLecturas();enviar('lecturas_hojas_CELULAR_'+hoyStr()+'.csv',x.txt,'lect')}
+  }
+  const ir=e.target.closest('[data-ir]');if(ir)irTab(ir.dataset.ir);
+});
+$('f-resp').onchange=e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const cat=catalogoDeRespaldo(JSON.parse(String(rd.result).replace(/^﻿/,'')));
+      if(S.cat&&cat.ts&&S.cat.ts&&cat.ts<S.cat.ts&&!confirm('Este respaldo es MÁS VIEJO que el que ya tienes ('+fmtTS(cat.ts)+' contra '+fmtTS(S.cat.ts)+'). ¿Usarlo de todos modos?'))return;
+      S.cat=cat;
+      const antes=Object.keys(S.asis).length+Object.keys(S.lect).length;
+      // lo pendiente que apunta a grupos/alumnos que ya no existen se conserva solo si sigue siendo válido
+      Object.keys(S.asis).forEach(k=>{const x=S.asis[k];if(!cat.grupos[x.g]||!cat.grupos[x.g].alumnos.includes(x.s))delete S.asis[k]});
+      Object.keys(S.lect).forEach(k=>{const x=S.lect[k];if(!cat.grupos[x.g]||!cat.grupos[x.g].alumnos.includes(x.s))delete S.lect[k]});
+      reconciliar();
+      const despues=Object.keys(S.asis).length+Object.keys(S.lect).length;
+      const gs=grupos();if(!gs.includes(S.ui.g))S.ui.g=gs[0];if(!gs.includes(S.ui.hg))S.ui.hg=gs[0];
+      S.ui.fecha=hoyStr();S.ui.p=cat.parcial;S.ui.hp=cat.parcial;
+      guardar();iniciarSelects();renderTodo();
+      toast('Datos de la PC cargados'+(antes!==despues?' · '+(antes-despues)+' registro(s) ya estaban en la PC':''),3200);
+    }catch(x){alert('Ese archivo no es un respaldo (.json) de CALIFICATED PC: '+x.message)}
+  };
+  rd.readAsText(f);
+};
+$('btn-borrar').onclick=()=>{
+  if(!confirm('Se borrarán del celular los grupos, asistencias y lecturas que no hayas enviado. ¿Continuar?'))return;
+  if(!confirm('Última confirmación: esto no se puede deshacer. ¿Borrar todo?'))return;
+  cerrarCamara();S=nuevoEstado();guardar();iniciarSelects();renderTodo();toast('Datos borrados')};
+
+/* ====================== arranque ====================== */
+function iniciarSelects(){
+  const gs=grupos(),op=gs.map(g=>`<option>${esc(g)}</option>`).join('');
+  ['l-g','h-g'].forEach(id=>$(id).innerHTML=op);
+  if(S.cat){
+    if(!gs.includes(S.ui.g))S.ui.g=gs[0];if(!gs.includes(S.ui.hg))S.ui.hg=gs[0];
+    $('l-g').value=S.ui.g;$('h-g').value=S.ui.hg;
+    S.ui.fecha=S.ui.fecha||hoyStr();$('l-f').value=S.ui.fecha;$('l-p').value=S.ui.p;$('h-p').value=S.ui.hp;
+  }
+  $('chk-auto').checked=!!S.ui.auto;
+}
+let tabAct='lista';
+function irTab(t){
+  tabAct=t;['lista','hojas','datos'].forEach(x=>{$('v-'+x).classList.toggle('hide',x!==t)});
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+  if(t!=='hojas'&&cam.corriendo)cerrarCamara();
+  if(t==='lista')renderLista();if(t==='hojas')renderHojas();if(t==='datos')renderDatos();window.scrollTo(0,0);
+}
+document.querySelector('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)irTab(b.dataset.tab)});
+function renderTodo(){
+  $('sub').textContent=S.cat?[S.cat.profesor,S.cat.escuela].filter(Boolean).join(' · ')||'Datos de la PC cargados':'Sin datos de la PC';
+  renderLista();renderHojas();renderDatos();
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&cam.corriendo)cerrarCamara()});
+if('serviceWorker' in navigator){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
+iniciarSelects();renderTodo();irTab(S.cat?'lista':'datos');
+window.__CEL={S:()=>S,catalogoDeRespaldo,csvAsistencias,csvLecturas,aceptarLectura,leerImagen,irTab,abrirRev:()=>R};
+</script>
+</body>
+</html>
